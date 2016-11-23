@@ -2,21 +2,19 @@
 # Salt Stack Salt Master Container
 #
 
-FROM ubuntu:14.04
-MAINTAINER SOON_ <dorks@thisissoon.com>
+FROM ubuntu:16.04
 
 # Update System
 RUN apt-get update && apt-get upgrade -y -o DPkg::Options::=--force-confold
 
-# Add PPA
-
-RUN apt-get install -y software-properties-common dmidecode
-RUN add-apt-repository -y ppa:saltstack/salt
+# Add PPA and update
+RUN apt-get update && apt-get install wget -y
+RUN wget -O - https://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
+RUN echo deb http://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest xenial main > /etc/apt/sources.list.d/saltstack.list
 RUN apt-get update
 
-# Install Salt
-
-RUN apt-get install -y salt-master=2014.1.11+ds-2trusty1
+# Install salt-master
+RUN apt-get install salt-master -y
 
 # Volumes
 
